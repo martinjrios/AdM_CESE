@@ -65,7 +65,10 @@ static void ProductoEscalar (void)
     uint32_t longitud = 3;
     uint32_t escalar = 2;
 
-    asm_productoEscalar32 (vectorIn, vectorOut, longitud, escalar);   
+    asm_productoEscalar32 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
+
+    c_zeros(vectorOut, longitud);  // limpio vectorOut
+    c_productoEscalar32 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
 }
 
 
