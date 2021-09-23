@@ -77,14 +77,12 @@
         @ Registros usados
         @   r4: resultado de la multiplicacion
         @   r5: contenido de cada posicion del vectorIn
-        push {r4}
-        push {r5}
+        push {r4, r5}
     .ej2_loop:
         ldr r5, [r0], 4     @ r5 = *r0; r0+=4
         mul r4, r5, r3      @ r4 = r5*r3
         str r4, [r1], 4     @ *r1 = r4; r1+=4
         subs r2, 1          @ r2-=1
         bne .ej2_loop
-        pop {r5}
-        pop {r4}
+        pop {r4, r5}
         bx lr
