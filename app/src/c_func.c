@@ -23,3 +23,14 @@ void c_productoEscalar16 (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t lo
 {
     for(uint32_t i = 0; i < longitud; i++) vectorOut[i] = vectorIn[i] * escalar;
 }
+
+// Ejercicio 4
+void c_productoEscalar12 (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitud, uint16_t escalar)
+{
+    uint16_t prodTemp;
+    for(uint32_t i = 0; i < longitud; i++)
+    {
+        prodTemp = vectorIn[i] * escalar;
+        vectorOut[i] = (prodTemp & 0xF000) >> 12 != 0 ? 0xFFF : prodTemp ;
+    }
+}

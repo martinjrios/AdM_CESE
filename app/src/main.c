@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdnoreturn.h>
 
-#define EJERCICIO3
+#define EJERCICIO4
 
 // Variable que se incrementa cada vez que se llama al handler de interrupcion
 // del SYSTICK.
@@ -85,6 +85,18 @@ static void ProductoEscalar16 (void)
     c_productoEscalar16 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
 }
 
+static void ProductoEscalar12 (void)
+{
+    uint16_t vectorIn[] = {0xFFFF, 3, 0x0FFF};
+    uint16_t vectorOut[3] = {0};
+    uint32_t longitud = 3;
+    uint16_t escalar = 2;
+
+    asm_productoEscalar12 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
+
+    //c_zeros(vectorOut, longitud);  // limpio vectorOut
+    c_productoEscalar12 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
+}
 
 static void LlamandoAMalloc (void)
 {
@@ -195,6 +207,10 @@ int main (void)
     #ifdef EJERCICIO3 
     ProductoEscalar16();
     #endif
+
+    #ifdef EJERCICIO4 
+    ProductoEscalar12();
+    #endif    
     
     //Suma ();
 
