@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdnoreturn.h>
 
+#define EJERCICIO3
 
 // Variable que se incrementa cada vez que se llama al handler de interrupcion
 // del SYSTICK.
@@ -69,6 +70,19 @@ static void ProductoEscalar (void)
 
     c_zeros(vectorOut, longitud);  // limpio vectorOut
     c_productoEscalar32 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
+}
+
+static void ProductoEscalar16 (void)
+{
+    uint16_t vectorIn[] = {2, 3, 4};
+    uint16_t vectorOut[3] = {0};
+    uint32_t longitud = 3;
+    uint16_t escalar = 2;
+
+    asm_productoEscalar16 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
+
+    //c_zeros(vectorOut, longitud);  // limpio vectorOut
+    c_productoEscalar16 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
 }
 
 
@@ -170,10 +184,18 @@ int main (void)
 {
     Inicio ();
 
+    #ifdef EJERCICIO1 
+    Zeros();
+    #endif
+
+    #ifdef EJERCICIO2 
     ProductoEscalar();
+    #endif
 
-    //Zeros();
-
+    #ifdef EJERCICIO3 
+    ProductoEscalar16();
+    #endif
+    
     //Suma ();
 
     //PrivilegiosSVC ();

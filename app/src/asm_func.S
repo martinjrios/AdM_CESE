@@ -7,6 +7,7 @@
 .global asm_svc
 .global asm_zeros
 .global asm_productoEscalar32
+.global asm_productoEscalar16
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ Prototipo en "C":
@@ -86,3 +87,28 @@
         bne .ej2_loop
         pop {r4, r5}
         bx lr
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ Prototipo en "C":
+@   void asm_productoEscalar16 (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitud, uint16_t escalar)
+@
+@ Parametros recibidos:
+@   r0: *vectorIn
+@   r1: *vectorOut
+@   r2: longitud
+@   r3: escalar
+@
+.thumb_func
+    asm_productoEscalar16:
+        @ Registros usados
+        @   r4: resultado de la multiplicacion
+        @   r5: contenido de cada posicion del vectorIn
+        push {r4}
+        .ej3_loop:
+            ldrh r4, [r0], 2
+            mul r4, r3
+            strh r4, [r1], 2
+            subs r2, 1 
+            bne .ej3_loop
+        pop {r4}
+        bx lr            
