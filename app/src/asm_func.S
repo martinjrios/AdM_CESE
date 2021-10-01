@@ -133,7 +133,7 @@
         .ej4_loop:
             ldrh r4, [r0], 2    @ r4 = *r0; r0+=2 (half word)
             mul r4, r3          @ r4 = r4*r3
-            cmp r5, r4, lsr #12
+            cmp r5, r4, lsr #12 @ if(r4 >> 12 == 0)
             beq .not_saturate
             mov r4, #4095
         .not_saturate:
