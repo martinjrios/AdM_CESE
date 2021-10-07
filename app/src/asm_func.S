@@ -9,6 +9,7 @@
 .global asm_productoEscalar32
 .global asm_productoEscalar16
 .global asm_productoEscalar12
+.global asm_productoEscalar12usat
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ Prototipo en "C":
@@ -142,3 +143,29 @@
             bne .ej4_loop
         pop {r4, r5}
         bx lr    
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ Prototipo en "C":
+@   void asm_productoEscalar12usat (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitud, uint16_t escalar)
+@   Se realiza la saturacion utilizando las instrucciones de saturacion.
+@
+@ Parametros recibidos:
+@   r0: *vectorIn
+@   r1: *vectorOut
+@   r2: longitud
+@   r3: escalar
+@
+.thumb_func
+    asm_productoEscalar12usat:
+        @ Registros usados
+        @   r4: resultado de la multiplicacion
+        push {r4}
+        .ej4bis_loop:
+            ldrh r4, [r0], 2    @ r4 = *r0; r0+=2 (half word)
+            mul r4, r3          @ r4 = r4*r3
+            usat r4,12,r4
+            strh r4, [r1], 2    @ *r1 = r4; r1+=2 (half word)
+            subs r2, 1          @ r2-=1
+            bne .ej4bis_loop
+        pop {r4}
+        bx lr  

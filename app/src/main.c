@@ -7,6 +7,15 @@
 
 #define EJERCICIO4
 
+#define DWT_CONTROL             (*((volatile uint32_t*)0xE0001000))
+#define DWT_CYCCNT              (*((volatile uint32_t*)0xE0001004))
+#define DWT_CYCCNTENA_BIT       (1UL<<0)
+
+#define EnableCycleCounter()    DWT_CONTROL |= DWT_CYCCNTENA_BIT
+#define GetCycleCounter()       DWT_CYCCNT
+#define ResetCycleCounter()     DWT_CYCCNT = 0
+#define DisableCycleCounter()   DWT_CONTROL &= ~DWT_CYCCNTENA_BIT
+
 // Variable que se incrementa cada vez que se llama al handler de interrupcion
 // del SYSTICK.
 static volatile uint32_t s_ticks = 0;
@@ -65,11 +74,22 @@ static void ProductoEscalar (void)
     uint32_t vectorOut[3] = {0};
     uint32_t longitud = 3;
     uint32_t escalar = 2;
+    char printOutput[128];
 
+    EnableCycleCounter();
+
+    ResetCycleCounter();
     asm_productoEscalar32 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
+    volatile uint32_t cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles asm_productoEscalar32: %d\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);    
 
     c_zeros(vectorOut, longitud);  // limpio vectorOut
+    ResetCycleCounter();
     c_productoEscalar32 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles c_productoEscalar32: %d\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);    
 }
 
 static void ProductoEscalar16 (void)
@@ -78,11 +98,22 @@ static void ProductoEscalar16 (void)
     uint16_t vectorOut[3] = {0};
     uint32_t longitud = 3;
     uint16_t escalar = 2;
+    char printOutput[128];
 
+    EnableCycleCounter();
+
+    ResetCycleCounter();
     asm_productoEscalar16 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
+    volatile uint32_t cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles asm_productoEscalar16: %d\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);
 
     //c_zeros(vectorOut, longitud);  // limpio vectorOut
+    ResetCycleCounter();
     c_productoEscalar16 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles c_productoEscalar16: %d\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);    
 }
 
 static void ProductoEscalar12 (void)
@@ -91,11 +122,37 @@ static void ProductoEscalar12 (void)
     uint16_t vectorOut[3] = {0};
     uint32_t longitud = 3;
     uint16_t escalar = 2;
+    char printOutput[128];
 
+    EnableCycleCounter();
+
+    ResetCycleCounter();
     asm_productoEscalar12 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
+    volatile uint32_t cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles asm_productoEscalar12: %d\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);
+    
+    ResetCycleCounter();
+    asm_productoEscalar12usat (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles asm_productoEscalar12usat: %d\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);
 
     //c_zeros(vectorOut, longitud);  // limpio vectorOut
+    ResetCycleCounter();
     c_productoEscalar12 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles c_productoEscalar12: %d\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);
+
+    uint32_t tick_init;
+    while(1)
+    {
+        Board_UARTPutSTR(printOutput);
+        Board_LED_Toggle(LED_1);
+        tick_init = s_ticks;
+        while(s_ticks - tick_init < 1000); // delay 1s 
+    }
 }
 
 static void LlamandoAMalloc (void)
