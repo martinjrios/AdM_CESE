@@ -144,15 +144,6 @@ static void ProductoEscalar12 (void)
     cycleCounter = GetCycleCounter();
     sprintf(printOutput, "Cycles c_productoEscalar12: %d\r\n", cycleCounter);
     Board_UARTPutSTR(printOutput);
-
-    uint32_t tick_init;
-    while(1)
-    {
-        Board_UARTPutSTR(printOutput);
-        Board_LED_Toggle(LED_1);
-        tick_init = s_ticks;
-        while(s_ticks - tick_init < 1000); // delay 1s 
-    }
 }
 
 static void LlamandoAMalloc (void)
