@@ -10,11 +10,13 @@
 #define DWT_CONTROL             (*((volatile uint32_t*)0xE0001000))
 #define DWT_CYCCNT              (*((volatile uint32_t*)0xE0001004))
 #define DWT_CYCCNTENA_BIT       (1UL<<0)
+#define DWT_DEMCR               (*((volatile uint32_t*)0xE000EDFC))
 
 #define EnableCycleCounter()    DWT_CONTROL |= DWT_CYCCNTENA_BIT
 #define GetCycleCounter()       DWT_CYCCNT
 #define ResetCycleCounter()     DWT_CYCCNT = 0
 #define DisableCycleCounter()   DWT_CONTROL &= ~DWT_CYCCNTENA_BIT
+#define EnableAllDwt()          DWT_DEMCR |= 1<<24
 
 // Variable que se incrementa cada vez que se llama al handler de interrupcion
 // del SYSTICK.
@@ -28,6 +30,10 @@ static void Inicio (void)
     Board_Init ();
     SystemCoreClockUpdate ();
     SysTick_Config (SystemCoreClock / 1000);
+
+    EnableAllDwt();
+    EnableCycleCounter();
+
 }
 
 
@@ -76,8 +82,6 @@ static void ProductoEscalar (void)
     uint32_t escalar = 2;
     char printOutput[128];
 
-    EnableCycleCounter();
-
     ResetCycleCounter();
     asm_productoEscalar32 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
     volatile uint32_t cycleCounter = GetCycleCounter();
@@ -100,8 +104,6 @@ static void ProductoEscalar16 (void)
     uint16_t escalar = 2;
     char printOutput[128];
 
-    EnableCycleCounter();
-
     ResetCycleCounter();
     asm_productoEscalar16 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
     volatile uint32_t cycleCounter = GetCycleCounter();
@@ -123,8 +125,6 @@ static void ProductoEscalar12 (void)
     uint32_t longitud = 3;
     uint16_t escalar = 2;
     char printOutput[128];
-
-    EnableCycleCounter();
 
     ResetCycleCounter();
     asm_productoEscalar12 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
