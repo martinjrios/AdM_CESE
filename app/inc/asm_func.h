@@ -10,3 +10,4 @@ extern void asm_productoEscalar32 (uint32_t * vectorIn, uint32_t * vectorOut, ui
 extern void asm_productoEscalar16 (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitud, uint16_t escalar); // Ejercicio 3
 extern void asm_productoEscalar12 (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitud, uint16_t escalar); // Ejercicio 4
 extern void asm_productoEscalar12usat (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitud, uint16_t escalar); // Ejercicio 4
+extern void asm_filtroVentana10(uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitudVectorIn);   // Ejercicio 5

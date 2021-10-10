@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdnoreturn.h>
 
-#define EJERCICIO4
+#define EJERCICIO5
 
 #define DWT_CONTROL             (*((volatile uint32_t*)0xE0001000))
 #define DWT_CYCCNT              (*((volatile uint32_t*)0xE0001004))
@@ -33,7 +33,6 @@ static void Inicio (void)
 
     EnableAllDwt();
     EnableCycleCounter();
-
 }
 
 
@@ -120,30 +119,44 @@ static void ProductoEscalar16 (void)
 
 static void ProductoEscalar12 (void)
 {
-    uint16_t vectorIn[] = {0xFFFF, 3, 0x0FFF};
-    uint16_t vectorOut[3] = {0};
-    uint32_t longitud = 3;
+    uint16_t vectorIn[1000];
+    uint16_t vectorOut[1000] = {0};
+    uint32_t longitud = 1000;
     uint16_t escalar = 2;
     char printOutput[128];
+
+    for(uint32_t i = 0; i < 1000; i++) // Inicializacion de vectorIn
+        vectorIn[i] = 0x0FFF;
 
     ResetCycleCounter();
     asm_productoEscalar12 (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
     volatile uint32_t cycleCounter = GetCycleCounter();
-    sprintf(printOutput, "Cycles asm_productoEscalar12: %d\r\n", cycleCounter);
+    sprintf(printOutput, "Cycles asm_productoEscalar12: %u\r\n", cycleCounter);
     Board_UARTPutSTR(printOutput);
     
     ResetCycleCounter();
     asm_productoEscalar12usat (vectorIn, vectorOut, longitud, escalar);   // Implementacion en assembler
     cycleCounter = GetCycleCounter();
-    sprintf(printOutput, "Cycles asm_productoEscalar12usat: %d\r\n", cycleCounter);
+    sprintf(printOutput, "Cycles asm_productoEscalar12usat: %u\r\n", cycleCounter);
     Board_UARTPutSTR(printOutput);
 
     //c_zeros(vectorOut, longitud);  // limpio vectorOut
     ResetCycleCounter();
     c_productoEscalar12 (vectorIn, vectorOut, longitud, escalar); // Implementacion en C
     cycleCounter = GetCycleCounter();
-    sprintf(printOutput, "Cycles c_productoEscalar12: %d\r\n", cycleCounter);
+    sprintf(printOutput, "Cycles c_productoEscalar12: %u\r\n", cycleCounter);
     Board_UARTPutSTR(printOutput);
+}
+
+static void FiltroVentana10 (void)
+{
+    uint16_t vectorIn[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    uint16_t vectorOut[10] = {0};
+    uint32_t longitud = 10;
+
+    c_filtroVentana10(vectorIn, vectorOut, longitud);
+
+    asm_filtroVentana10(vectorIn, vectorOut, longitud);
 }
 
 static void LlamandoAMalloc (void)
@@ -259,7 +272,11 @@ int main (void)
     #ifdef EJERCICIO4 
     ProductoEscalar12();
     #endif    
-    
+
+    #ifdef EJERCICIO5 
+    FiltroVentana10();
+    #endif    
+
     //Suma ();
 
     //PrivilegiosSVC ();

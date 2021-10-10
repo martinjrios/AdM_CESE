@@ -34,3 +34,23 @@ void c_productoEscalar12 (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t lo
         vectorOut[i] = (prodTemp & 0xF000) >> 12 != 0 ? 0xFFF : prodTemp ;
     }
 }
+
+// Ejercicio 5
+void c_filtroVentana10(uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitudVectorIn)
+{
+    static const uint8_t windows_size = 10; 
+    int suma_parcial = 0;
+    uint32_t i = 0;
+    uint32_t pos = 0;
+
+    for (i = 0; i < longitudVectorIn; i++) {
+        suma_parcial = 0;
+        uint8_t j = i;
+
+        for (j = i; j < i + windows_size; j++) {
+            pos = j % longitudVectorIn;
+            suma_parcial += vectorIn[pos];
+        }
+        vectorOut[i] = suma_parcial/windows_size;
+    }
+}
