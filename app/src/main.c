@@ -153,10 +153,19 @@ static void FiltroVentana10 (void)
     uint16_t vectorIn[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     uint16_t vectorOut[10] = {0};
     uint32_t longitud = 10;
+    char printOutput[128];
 
+    ResetCycleCounter();
     c_filtroVentana10(vectorIn, vectorOut, longitud);
+    volatile uint32_t cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles c_filtroVentana10: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);    
 
+    ResetCycleCounter();
     asm_filtroVentana10(vectorIn, vectorOut, longitud);
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles asm_filtroVentana10: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);    
 }
 
 static void LlamandoAMalloc (void)
