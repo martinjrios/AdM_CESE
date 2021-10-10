@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdnoreturn.h>
 
-#define EJERCICIO5
+#define EJERCICIO6
 
 #define DWT_CONTROL             (*((volatile uint32_t*)0xE0001000))
 #define DWT_CYCCNT              (*((volatile uint32_t*)0xE0001004))
@@ -168,6 +168,26 @@ static void FiltroVentana10 (void)
     Board_UARTPutSTR(printOutput);    
 }
 
+static void Pack32to16 (void)
+{
+    int32_t vectorIn[] = {70000, -70000, 65536, 0xFFFFFFFF, 0x0001FFFF};
+    int16_t vectorOut[5] = {0};
+    uint32_t longitud = 5;
+    char printOutput[128];
+
+    ResetCycleCounter();
+    c_pack32to16(vectorIn, vectorOut, longitud);
+    volatile uint32_t cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles c_pack32to16: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);    
+
+    ResetCycleCounter();
+    asm_pack32to16(vectorIn, vectorOut, longitud);
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles asm_pack32to16: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);    
+}
+
 static void LlamandoAMalloc (void)
 {
     // De donde saca memoria malloc?
@@ -285,6 +305,10 @@ int main (void)
     #ifdef EJERCICIO5 
     FiltroVentana10();
     #endif    
+
+    #ifdef EJERCICIO6 
+    Pack32to16();
+    #endif       
 
     //Suma ();
 

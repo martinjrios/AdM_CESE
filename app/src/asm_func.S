@@ -11,6 +11,7 @@
 .global asm_productoEscalar12
 .global asm_productoEscalar12usat
 .global asm_filtroVentana10
+.global asm_pack32to16
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ Prototipo en "C":
@@ -215,4 +216,25 @@
             cmp r2, r6              @ comparo si ya se alcanzo la longitud del vector
             bne .vector_loop
         pop {r4-r11}
+        bx lr          
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ Prototipo en "C":
+@   void pack32to16 (int32_t * vectorIn, int16_t *vectorOut, uint32_t longitud)
+@
+@ Parametros recibidos:
+@   r0: *vectorIn
+@   r1: *vectorOut
+@   r2: longitud
+@
+.thumb_func
+    asm_pack32to16:
+        push {r4}
+        .ej6_loop:
+            ldr r4, [r0], 4     @ guardo el valor del vector de entrada
+            lsr r4, #16         @ me quedo con los 2 MSB
+            strh r4, [r1], 2    @ guardo la parte baja de r4 en el vector de salida
+            subs r2, 1          @ r2-=1
+            bne .ej6_loop
+        pop {r4}
         bx lr          
