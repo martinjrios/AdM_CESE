@@ -77,3 +77,17 @@ int32_t c_max (int32_t * vectorIn, uint32_t longitud)
 
     return max_pos;
 }
+
+// Ejercicio 9
+void c_invertir (uint16_t * vector, uint32_t longitud)
+{
+    uint16_t aux_s, aux_e;
+
+    for(uint32_t i = 0; i < longitud/2; i++)
+    {
+        aux_e = vector[longitud - 1 - i];     
+        aux_s = vector[i];
+        vector[longitud - 1 - i] = aux_s;
+        vector[i] = aux_e;
+    }  
+}

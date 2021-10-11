@@ -13,6 +13,7 @@
 .global asm_filtroVentana10
 .global asm_pack32to16
 .global asm_max
+.global asm_invertir
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ Prototipo en "C":
@@ -272,4 +273,37 @@
             bne .ej7_loop
         mov r0, r3            @ return max pos
         pop {r4, r5}
+        bx lr          
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ Prototipo en "C":
+@   void invertir (uint16_t * vector, uint32_t longitud)
+@   Se realiza la saturacion utilizando las instrucciones de saturacion.
+@
+@ Parametros recibidos:
+@   r0: *vectorIn
+@   r1: longitud
+@
+.thumb_func
+    asm_invertir:
+        @ Registros usados
+        @   r2: utilizado para recorrer el vector de atras hacia adelante
+        @   r3: utilizado para guardar el valor de adelante
+        @   r4: utilizado para guardar el valor de atras
+
+        push {r4}
+        mov r2, r0              @ hago una copia de la direccion del vector
+        add r2, r2, r1, lsl 1   @ me posiciono en la ultima posicion
+        sub r2, 2               @ la ultima posicion esta en longitud-1
+        lsr r1, 1               @ La cantidad de iteraciones es la mitad de la longitud ya que
+                                @ voy cambiando los valores de adelante hacia atras y atras hacia
+                                @ adelante en cada ciclo.
+        .ej9_loop:
+            ldrh r3, [r0]        @ guardo el valor de adelante en una variable temporal
+            ldrh r4, [r2]        @ guardo el valor de atras en una variable temporal
+            strh r4, [r0], 2     @ el valor de atras pasa adelante
+            strh r3, [r2], -2    @ el valor de adelante pasa atras
+            subs r1, 1
+            bne .ej9_loop
+        pop {r4}
         bx lr          

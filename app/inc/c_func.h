@@ -11,3 +11,4 @@ void c_productoEscalar12 (uint16_t * vectorIn, uint16_t * vectorOut, uint32_t lo
 void c_filtroVentana10(uint16_t * vectorIn, uint16_t * vectorOut, uint32_t longitudVectorIn);   // Ejercicio 5
 void c_pack32to16 (int32_t * vectorIn, int16_t *vectorOut, uint32_t longitud);    // Ejercicio 6
 int32_t c_max (int32_t * vectorIn, uint32_t longitud);    // Ejercicio 7
+void c_invertir (uint16_t * vector, uint32_t longitud);   // Ejercicio 9
