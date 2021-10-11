@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdnoreturn.h>
 
-#define EJERCICIO6
+#define EJERCICIO7
 
 #define DWT_CONTROL             (*((volatile uint32_t*)0xE0001000))
 #define DWT_CYCCNT              (*((volatile uint32_t*)0xE0001004))
@@ -188,6 +188,30 @@ static void Pack32to16 (void)
     Board_UARTPutSTR(printOutput);    
 }
 
+static void Max (void)
+{
+    int32_t vectorIn[] = {5000, -5000, 10, 10000, -10};
+    uint32_t longitud = 5;
+    int32_t maxPos;
+    char printOutput[128];
+
+    ResetCycleCounter();
+    maxPos = c_max(vectorIn, longitud);
+    volatile uint32_t cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Posicion maximo en C: %i\r\n", maxPos);
+    Board_UARTPutSTR(printOutput);
+    sprintf(printOutput, "Cycles c_max: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);     
+
+    ResetCycleCounter();
+    maxPos = asm_max(vectorIn, longitud);
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Posicion maximo en Asm: %i\r\n", maxPos);
+    Board_UARTPutSTR(printOutput);  
+    sprintf(printOutput, "Cycles asm_max: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);         
+}
+
 static void LlamandoAMalloc (void)
 {
     // De donde saca memoria malloc?
@@ -309,6 +333,10 @@ int main (void)
     #ifdef EJERCICIO6 
     Pack32to16();
     #endif       
+
+    #ifdef EJERCICIO7
+    Max();
+    #endif     
 
     //Suma ();
 
