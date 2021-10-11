@@ -7,6 +7,15 @@ Preguntas orientadoras
 
 Cortex M
 1. Describa brevemente las diferencias entre las familias de procesadores Cortex M0, M3 y M4.
+    Los procesadores Cortex M0/M0+ fueron diseñados para bajo consumo y bajo costo, mientras que los M3 y M4 presentan mayor performance, agregando funcionalidades para el procesamiento digital de señales, unidad de protección de memoria, etc.
+
+    La arquitectura de los procesadores M0 es Von Neumann (ARMv6-M), mientras que los procesadores M3 y M4 presentan arquitectura Harvard (ARMv7-M).
+
+    Los procesadores M0 poseen un set de instrucciones reducido, utilizando la mayoria de las instrucciones Thumb y algunas Thumb-2, mientras que los procesadores M3 y M4, utilizan el set completo. 
+
+    Los procesadores M0 y M3 no poseen unidad de punto flotante, mientras que en los M4 es opcional, de acuerdo al fabricante. 
+
+    Los procesadores M3 y M4 poseen división por hardware y aritmética saturada, mientras que los M0 no. 
 
 2. ¿Por qué se dice que el set de instrucciones Thumb permite mayor densidad de código? Explique
     Densidad de código se refiere a la cantidad de intrucciones necesarias para realizar una determinada operación y a cuánto espacio ocupa cada instrucción en memoria.
@@ -19,11 +28,15 @@ Cortex M
     El mapa de memoria de la familia es plano con capacidad de direccionar 4 GB. 
 
 5. ¿Qué ventajas presenta el uso de los “shadowed pointers” del PSP y el MSP?
-    
+    Tienen mayor utilidad en los sistemas operativos ya que permiten que haya un Stack Pointer para las tareas y otro para el sistema, por lo que si se corrompe el stack de la tareas, el sistema puede seguir funcionando.
 
 6. Describa los diferentes modos de privilegio y operación del Cortex M, sus relaciones y como se conmuta de uno al otro. Describa un ejemplo en el que se pasa del modo privilegiado a no priviligiado y nuevamente a privilegiado.
+    Existen dos modos de operación en los cortex M: Thread Mode y Handler Mode. En el modo Thread, se puede ejecutar código en modo privilegiado o no privilegiado. El modo Handler siempre se ejecuta en modo privilegiado.
+    El pasaje de modo privilegiado a no privilegiado se hace por software, mientras que si se está en modo no privilegiado, sólo se puede volver al modo privilegiado mediante una interrupción.
+    Un ejemplo de uso podría ser en un sistema operativo, en donde al iniciar el sistema, se arranca en modo privilegiado. Luego, las tareas se ejecutan en modo no privilegiado hasta que ocurre una interrupción, en donde dentro del Handler de la interrupción se está en modo privilegiado y se puede cambiar el registro de control del modo para pasar a modo privilegiado y ejecutar las tareas en ese modo. 
 
 7. ¿Qué se entiende por modelo de registros ortogonal? Dé un ejemplo
+    
 
 8. ¿Qué ventajas presenta el uso de intrucciones de ejecución condicional (IT)? Dé un ejemplo
 
