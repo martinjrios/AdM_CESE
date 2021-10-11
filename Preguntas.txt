@@ -36,13 +36,20 @@ Cortex M
     Un ejemplo de uso podría ser en un sistema operativo, en donde al iniciar el sistema, se arranca en modo privilegiado. Luego, las tareas se ejecutan en modo no privilegiado hasta que ocurre una interrupción, en donde dentro del Handler de la interrupción se está en modo privilegiado y se puede cambiar el registro de control del modo para pasar a modo privilegiado y ejecutar las tareas en ese modo. 
 
 7. ¿Qué se entiende por modelo de registros ortogonal? Dé un ejemplo
-    
+    Significa que se puede aplicar cualquier instrucción a cualquier registro. Por ejemplo, se puede aplicar la instrucción ADD r0, r1, r2 como también ADD r6, r7, r8 o cualquier otro grupo de registros.
 
 8. ¿Qué ventajas presenta el uso de intrucciones de ejecución condicional (IT)? Dé un ejemplo
+    Permite ejecutar o no ciertas instrucciones sin que haya un cambio de flujo en el programa por el agregado de ramas. Esto evita que se destruya el pipeline y por consiguiente se puede lograr mayor velocidad de ejecución.
+    Por ejemplo, se puede utilizar la instrucción ANDNE para realizar un AND entre dos registros si el flag Z está en cero.  
 
 9. Describa brevemente las excepciones más prioritarias (reset, NMI, Hardfault).
+    Reset: Ocurre al iniciar el programa. Reinicia el core del ARM.
+    NMI: Interrupción no enmascarable.
+    Hardfault: es una excepción genérica para atender cualquier tipo de falla que no fue atendida por otra interrupción.
 
 10. Describa las funciones principales de la pila. ¿Cómo resuelve la arquitectura el llamado a funciones y su retorno?
+    La pila permite pasar datos a funciones o subrutinas, guardar variables locales, guardar el estado del procesador y de los registros de propósito general cuando ocurre una interrupción
+    Al llamar a una función, se guardan los registros r0 a r3, r12, LR, PSR y PC en la pila, es decir el contexto de trabajo. Al retornar de la función se cargan nuevamente los valores del contexto.
 
 11. Describa la secuencia de reset del microprocesador.
 
@@ -61,20 +68,32 @@ Cortex M
 17. ¿Qué es el systick? ¿Por qué puede afirmarse que su implementación favorece la portabilidad de los sistemas operativos embebidos?
 
 18. ¿Qué funciones cumple la unidad de protección de memoria (MPU)?
+    Permite proteger el acceso a memoria. Puede evitar que ciertas aplicaciones accedan a áreas de memoria de otras aplicaciones, del kernel o periféricos sin los permisos adecuados.
 
 19. ¿Cuántas regiones pueden configurarse como máximo? ¿Qué ocurre en caso de haber solapamientos de las regiones? ¿Qué ocurre con las zonas de memoria no cubiertas por las regiones definidas?
 
 20. ¿Para qué se suele utilizar la excepción PendSV? ¿Cómo se relaciona su uso con el resto de las excepciones? Dé un ejemplo
 
 21. ¿Para qué se suele utilizar la excepción SVC? Expliquelo dentro de un marco de un sistema operativo embebido.
+    Se genera por software y es parte del proceso de atención de una llamada al sistema operativo mediante una instrucción SVC
 
 ISA
 1. ¿Qué son los sufijos y para qué se los utiliza? Dé un ejemplo
+    Los sufijos son agregados al final de las instrucciones para realizar ejecución condicional. Por ejemplo, se puede utilizar para comparar si el valor de un registro es menor a otro, con la instrucción B, con el sufijo LT, para realizar un salto, luego de comparar con la instrucción CMP.
 
 2. ¿Para qué se utiliza el sufijo ‘s’? Dé un ejemplo
+    Se utiliza para actualizar los flags de estado.
+    Por ejemplo, lo podemos utilizar para comparar si un registro tiene determinado valor para luego ejectuar un salto a otra parte del programa:
+    SUBS r0, #5
+    bne  .salto
 
 3. ¿Qué utilidad tiene la implementación de instrucciones de aritmética saturada? Dé un ejemplo con operaciones con datos de 8 bits.
+    Permite que si una operación se va del rango máximo permitido por el tipo de dato, se fije el valor al rango máximo, en vez de irse al valor inicial. Esto es útil en ciertos caso en los que se desea que el valor de la operación no difiera tanto del resultado esperado.
+    Por ejemplo, si se realiza una operacion de suma de 2 enteros sin signo de 8 bits, en la cual uno es 250 y el otro es 10, el resultado se va del rango permitido para 8 bits. Si se realiza sin aritmética saturada el resultado daría 4, pero con aritmética saturada daría 255. 
 
 4. Describa brevemente la interfaz entre assembler y C ¿Cómo se reciben los argumentos de las funciones? ¿Cómo se devuelve el resultado? ¿Qué registros deben guardarse en la pila antes de ser modificados?
+    Los argumentos de las funciones se reciben en los registros r0 a r3.
+    El resultado se devuelve en el registro r0.
+    Los registros r4 a r11 deben guardarse en la pila antes de ser modificados. 
 
 5. ¿Qué es una instrucción SIMD? ¿En qué se aplican y que ventajas reporta su uso? Dé un ejemplo.
