@@ -91,3 +91,14 @@ void c_invertir (uint16_t * vector, uint32_t longitud)
         vector[i] = aux_e;
     }  
 }
+
+// Ejercicio 10
+#define SAMPLE_RATE     44100
+#define ECHO_DELAY      20/1000
+#define SAMPLE_DELAY    (SAMPLE_RATE*ECHO_DELAY)
+
+void c_eco (int16_t * vector, uint32_t longitud)
+{
+    for(uint32_t i = SAMPLE_DELAY; i < longitud; i++)
+        vector[i] += vector[i - SAMPLE_DELAY]/2;
+}
