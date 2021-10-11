@@ -216,10 +216,19 @@ static void Invertir (void)
 {
     uint16_t vectorIn[] = {1, 2, 3, 4, 5};
     uint32_t longitud = 5;
+    char printOutput[128];
 
+    ResetCycleCounter();
     c_invertir(vectorIn, longitud);
+    volatile uint32_t cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles c_invertir: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);     
 
+    ResetCycleCounter();
     asm_invertir(vectorIn, longitud);
+    cycleCounter = GetCycleCounter();
+    sprintf(printOutput, "Cycles asm_invertir: %u\r\n", cycleCounter);
+    Board_UARTPutSTR(printOutput);     
 }
 
 static void LlamandoAMalloc (void)
