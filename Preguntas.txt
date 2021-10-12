@@ -70,12 +70,15 @@ Cortex M
     Al utilizar unidad de punto flotante además de los registros que se guardan normalmente, se agregan los registros S0 a S15 y FPSCR de la FPU.
 
 16. Explique las características avanzadas de atención a interrupciones: tail chaining y late arrival.
+    Tail chaining: cuando ocurre una excepción y el procesador está manejando otra excepción de la misma o mayor prioridad, la excepción queda en estado pendiente. Cuando termina de ejecutarse la excepción de mayor prioridad, en vez de hacer el unstacking y el stacking de nuevo para ingresar a la excepción pendiente, el procesador salta ese paso e ingresa directamente al handler de la excepción pendiente.
+
+    Late arrival: se da cuando se está conmutando a una interrupción y ocurre otra de mayor prioridad. Se cambia a la otra interrupción pero los registros que ya fueron cargados hasta el momento, no se vuelven a cargar. 
 
 17. ¿Qué es el systick? ¿Por qué puede afirmarse que su implementación favorece la portabilidad de los sistemas operativos embebidos?
     El systick es un timer descendente de 24 bits incorporado a los cortex M (siendo opcional en los M0 y M1). Permite realizar la temporización en sistemas operativos embebidos ya que se puede utilizar para generar la excepción de Systick. Al ser de muy fácil configuración, ya que basta con configurar el valor de recarga, se puede portar fácilmente a cualquier sistema operativo embebido.
 
 18. ¿Qué funciones cumple la unidad de protección de memoria (MPU)?
-    Se puede utilizar para hacer los sistemas embebidos más robustos y más seguros. Permite proteger el acceso a memoria. Puede evitar que ciertas aplicaciones accedan a áreas de memoria de otras aplicaciones, del kernel o periféricos sin los permisos adecuados. 
+    Permite proteger el acceso a memoria. Puede evitar que ciertas aplicaciones accedan a áreas de memoria de otras aplicaciones, del kernel o periféricos sin los permisos adecuados. 
 
 19. ¿Cuántas regiones pueden configurarse como máximo? ¿Qué ocurre en caso de haber solapamientos de las regiones? ¿Qué ocurre con las zonas de memoria no cubiertas por las regiones definidas?
     Se pueden configurar 8 regiones como máximo y una región de background. En caso de que una región de memoria se encuentre en dos regiones protegidas por la MPU, los atributos y permisos de acceso a memoria corresponderán a la región de mayor numeración. Si se intenta acceder a una región de memoria no definida, ocurrirá una excepción de falla, la cual puede ser una MemManage o HardFault. 
