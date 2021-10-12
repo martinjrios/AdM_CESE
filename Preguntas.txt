@@ -44,7 +44,7 @@ Cortex M
 
 9. Describa brevemente las excepciones más prioritarias (reset, NMI, Hardfault).
     Reset: Ocurre al iniciar el programa. Reinicia el core del ARM.
-    NMI: Interrupción no enmascarable.
+    NMI: Interrupción no enmascarable. Se suele utilizar para el watchdog o para alertar al procesador que la tensión de alimentación cayó por debajo de cierto valor.
     Hardfault: es una excepción genérica para atender cualquier tipo de falla que no fue atendida por otra interrupción.
 
 10. Describa las funciones principales de la pila. ¿Cómo resuelve la arquitectura el llamado a funciones y su retorno?
@@ -55,14 +55,19 @@ Cortex M
     El procesador lee las 2 primeras palabras de la memoria. La primer palabra contiene el valor inicial del MSP y la segunda, la dirección inicial del handler del reset. Luego setea el MSP y el PC con los valores leídos anteriormente. Finalmente, comienza a ejecutar la primera instrucción.
 
 12. ¿Qué entiende por “core peripherals”? ¿Qué diferencia existe entre estos y el resto de los periféricos?
+    Son los periféricos que conforman el procesador. En los Cortex-M podemos encontrar el NVIC, Systick timer y MPU entre otros. Se diferencian del resto de los periféricos en que estos son indispensables para el funcionamiento de la arquitectura. 
 
 13. ¿Cómo se implementan las prioridades de las interrupciones? Dé un ejemplo
+    Las prioridades de la interrupciones se programan en el NVIC. Las tres primeras fuentes de interrupciones (Reset, NMI y HardFault) tienen prioridades fijas, mientras que el resto se puede programar hasta en 128 niveles de prioridad. Un valor numérico menor, es más prioritario. En la práctica, la cantidad de niveles programables lo define el fabricante, utilizando cierta cantidad de bits más significativos del registro de configuración de prioridad. Por ejemplo, para configurar una interrupción con un valor determinado de prioridad, en un procesador que utiliza 3 bits del registro de configuración de prioridad, se van a tener disponibles 8 niveles de prioridad: 0x00 (el más prioritario), 0x20, 0x40, 0x80, 0xA0, 0xC0 y 0xE0. Configurando el registro con el valor 11100000 (0xE0), tendríamos el valor menos prioritario. 
 
 14. ¿Qué es el CMSIS? ¿Qué función cumple? ¿Quién lo provee? ¿Qué ventajas aporta?
+    CMSIS es la capa de abstracción de hardware que es independiente a cualquier fabricante para la familia de procesadores Cortex-M. Con CMSIS se simplifica la reutilización de software y se acorta el tiempo de aprendizaje para nuevos desarrolladores. 
 
 15. Cuando ocurre una interrupción, asumiendo que está habilitada ¿Cómo opera el microprocesador para atender a la subrutina correspondiente? Explique con un ejemplo
+    Cuando una interrupción ocurre, el NVIC compara el nivel de prioridad de la interrupción con el nivel actual. Si la interrupción tiene mayor prioridad, la tarea que se está ejecutando se interrumpe y se guarda todo en contexto en los registros. A continuación pasa a ejecutarse el handler de la interrupción. Finalizado el handler, se ejecuta la excepción de retorno, en la cual se vuelve a cargar el contexto previo a la interrupción. Paralelamente al proceso de carga del contexto, el procesador comienza a cargar las instrucciones de la tarea previamente interrumpida para retornar lo más pronto posible.
 
 17. ¿Cómo cambia la operación de stacking al utilizar la unidad de punto flotante?
+    Al utilizar unidad de punto flotante además de los registros que se guardan normalmente, se agregan los registros S0 a S15 y FPSCR de la FPU.
 
 16. Explique las características avanzadas de atención a interrupciones: tail chaining y late arrival.
 
