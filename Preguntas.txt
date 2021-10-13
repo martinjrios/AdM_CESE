@@ -87,7 +87,7 @@ Cortex M
     Se suele utilizar para resolver el problema de cambio de contexto cuando sucede una excepción antes de la excepción del Systick, lo que provoca la Usage Fault excepción. La excepción PendSV permite demorar el cambio de contexto hasta que se procesen todas las excepciones. Si el OS decide que es necesario un cambio de contexto, setea el pending status de la PendSV y lleva a cabo el cambio de contexto dentro de la excepción PendSV, ya que es la última en ejecutarse por ser la de más baja prioridad.
 
 21. ¿Para qué se suele utilizar la excepción SVC? Expliquelo dentro de un marco de un sistema operativo embebido.
-    Se genera por software y es parte del proceso de atención de una llamada al sistema operativo mediante una instrucción SVC
+    La excepción SVC se utiliza en los Sistemas Operativos embebidos para implementar el cambio de contexto. Se genera por software y es parte del proceso de atención de una llamada al sistema operativo mediante una instrucción SVC.
 
 ISA
 1. ¿Qué son los sufijos y para qué se los utiliza? Dé un ejemplo
