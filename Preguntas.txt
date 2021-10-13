@@ -109,3 +109,4 @@ ISA
     Los registros r4 a r11 deben guardarse en la pila antes de ser modificados. 
 
 5. ¿Qué es una instrucción SIMD? ¿En qué se aplican y que ventajas reporta su uso? Dé un ejemplo.
+    Una instrucción SIMD es una instrucción que procesa múltiples datos en una única operación. Se aplican principalmente en el procesamiento de señales digitales ya que permiten realizar operaciones con varios tipos de datos de manera más eficiente. Por ejemplo, si tenemos una señal muestreada con una resolución de 16 bits, se puede realizar la suma de 4 muestras en una sola instrucción.
