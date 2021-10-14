@@ -321,7 +321,7 @@
 
 .thumb_func
     asm_eco:
-        push {r4}
+        push {r4, r5}
         mov r3, SAMPLE_DELAY           @ i = SAMPLE_DELAY
         lsl r3, 1
         add r3, r3, r0
@@ -334,5 +334,5 @@
 
             subs r1, 1
             bne .ej10_loop
-        pop {r4}
+        pop {r4, r5}
         bx lr             
