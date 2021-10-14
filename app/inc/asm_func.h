@@ -14,3 +14,4 @@ extern void asm_filtroVentana10(uint16_t * vectorIn, uint16_t * vectorOut, uint3
 extern void asm_pack32to16(int32_t * vectorIn, int16_t *vectorOut, uint32_t longitud);    // Ejercicio 6
 extern int32_t asm_max (int32_t * vectorIn, uint32_t longitud);     // Ejercicio 7
 extern void asm_invertir (uint16_t * vector, uint32_t longitud);   // Ejercicio 9
+extern void asm_eco (int16_t * vector, uint32_t longitud); // Ejercicio 10

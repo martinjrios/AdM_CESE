@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdnoreturn.h>
 
-#define EJERCICIO9
+#define EJERCICIO10
 
 #define DWT_CONTROL             (*((volatile uint32_t*)0xE0001000))
 #define DWT_CYCCNT              (*((volatile uint32_t*)0xE0001004))
@@ -231,6 +231,22 @@ static void Invertir (void)
     Board_UARTPutSTR(printOutput);     
 }
 
+static void Eco (void)
+{
+    uint16_t vectorIn[4096];
+    uint32_t longitud = 4096;
+
+    for(uint32_t i = 0; i < longitud; i++)
+        vectorIn[i] = i;
+
+    c_eco(vectorIn, longitud);
+
+    for(uint32_t i = 0; i < longitud; i++)
+        vectorIn[i] = i;    
+
+    asm_eco(vectorIn, longitud);
+}
+
 static void LlamandoAMalloc (void)
 {
     // De donde saca memoria malloc?
@@ -360,6 +376,10 @@ int main (void)
     #ifdef EJERCICIO9
     Invertir();
     #endif      
+
+    #ifdef EJERCICIO10
+    Eco();
+    #endif    
 
     //Suma ();
 
