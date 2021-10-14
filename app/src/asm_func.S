@@ -14,6 +14,7 @@
 .global asm_pack32to16
 .global asm_max
 .global asm_invertir
+.global asm_eco
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ Prototipo en "C":
@@ -278,7 +279,6 @@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @ Prototipo en "C":
 @   void invertir (uint16_t * vector, uint32_t longitud)
-@   Se realiza la saturacion utilizando las instrucciones de saturacion.
 @
 @ Parametros recibidos:
 @   r0: *vectorIn
@@ -307,3 +307,19 @@
             bne .ej9_loop
         pop {r4}
         bx lr          
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ Prototipo en "C":
+@   void c_eco (int16_t * vector, uint32_t longitud)
+@
+@ Parametros recibidos:
+@   r0: *vectorIn
+@   r1: longitud
+@
+.thumb_func
+    asm_eco:
+        push {r4}
+
+
+        pop {r4}
+        bx lr             
