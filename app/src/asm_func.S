@@ -316,10 +316,23 @@
 @   r0: *vectorIn
 @   r1: longitud
 @
+.equ    SAMPLE_RATE,44100
+.equ    SAMPLE_DELAY,882
+
 .thumb_func
     asm_eco:
         push {r4}
+        mov r3, SAMPLE_DELAY           @ i = SAMPLE_DELAY
+        lsl r3, 1
+        add r3, r3, r0
+        .ej10_loop:
+            ldr r4, [r0], 2
+            ldr r5, [r3], 2
 
+            lsr r5, 2                  @ r5/2
+            sadd16 r4, r4, r5
 
+            subs r1, 1
+            bne .ej10_loop
         pop {r4}
         bx lr             
