@@ -321,18 +321,22 @@
 .thumb_func
     asm_eco:
         push {r4-r6}
-        mov r3, SAMPLE_DELAY           @ i = SAMPLE_DELAY
-        lsl r3, 1
-        add r3, r3, r0
+        sub r1, 1
+        mov r3, r1           @ i = SAMPLE_DELAY
+        @lsl r3, 1
+        @add r3, r3, r0
+        sub r3, SAMPLE_DELAY 
+        @asr r1, 1
         mov r6, 0
-        sub r1, SAMPLE_DELAY 
-        lsr r1, 1
+        add r0, r0, r1, lsl 1   @ me posiciono en la ultima posicion
+        sub r1, SAMPLE_DELAY
         .ej10_loop:
             ldr r4, [r0]
-            ldr r5, [r3], 4
+            sub r3, r0, r3, lsl 1
+            ldr r5, [r3]
             shadd16 r5, r5, r6                  @ r5/2
             sadd16 r4, r4, r5
-            strh r4, [r0], 4
+            strh r4, [r0], -4
             subs r1, 1
             bne .ej10_loop
         pop {r4-r6}

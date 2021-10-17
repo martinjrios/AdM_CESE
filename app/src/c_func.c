@@ -99,6 +99,6 @@ void c_invertir (uint16_t * vector, uint32_t longitud)
 
 void c_eco (int16_t * vector, uint32_t longitud)
 {
-    for(uint32_t i = SAMPLE_DELAY; i < longitud; i++)
+    for(uint32_t i = longitud - 1; i >= SAMPLE_DELAY; i--)
         vector[i] += vector[i - SAMPLE_DELAY]/2;
 }

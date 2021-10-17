@@ -235,16 +235,29 @@ static void Eco (void)
 {
     uint16_t vectorIn[4096];
     uint32_t longitud = 4096;
+    char printOutput[128];
 
     for(uint32_t i = 0; i < longitud; i++)
         vectorIn[i] = i;
 
-    c_eco(vectorIn, longitud);
+    c_eco(vectorIn, longitud); 
 
     for(uint32_t i = 0; i < longitud; i++)
-        vectorIn[i] = i;    
+    {
+        sprintf(printOutput, "%u=%u ", i, vectorIn[i]);
+        Board_UARTPutSTR(printOutput);   
+        vectorIn[i] = i; 
+    }
+    Board_UARTPutSTR("\r\n--------------------------------------------\r\n");           
 
     asm_eco(vectorIn, longitud);
+
+    for(uint32_t i = 0; i < longitud; i++)
+    {
+        sprintf(printOutput, "%u=%u ", i, vectorIn[i]);
+        Board_UARTPutSTR(printOutput);
+    }
+    Board_UARTPutSTR("\r\n");       
 }
 
 static void LlamandoAMalloc (void)
