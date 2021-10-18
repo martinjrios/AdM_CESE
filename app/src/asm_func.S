@@ -321,23 +321,19 @@
 .thumb_func
     asm_eco:
         push {r4-r6}
-        sub r1, 1
-        mov r3, r1           @ i = SAMPLE_DELAY
-        @lsl r3, 1
-        @add r3, r3, r0
-        sub r3, SAMPLE_DELAY 
-        @asr r1, 1
+        sub r1, 2
+        mov r3, SAMPLE_DELAY 
         mov r6, 0
-        add r0, r0, r1, lsl 1   @ me posiciono en la ultima posicion
-        sub r1, SAMPLE_DELAY
+        add r0, r0, r1, lsl 1   @ me posiciono en la ultima posicion del vector
+        sub r3, r0, r3, lsl 1   @ calculo la posicion del eco
+        sub r1, SAMPLE_DELAY    @ las primeras SAMPLE_DELAY muestras no se le agrega eco
         .ej10_loop:
-            ldr r4, [r0]
-            sub r3, r0, r3, lsl 1
-            ldr r5, [r3]
-            shadd16 r5, r5, r6                  @ r5/2
-            sadd16 r4, r4, r5
-            strh r4, [r0], -4
-            subs r1, 1
+            ldr r4, [r0]        @ cargo la ultima posicion del vector
+            ldr r5, [r3], -4    @ cargo la posicion del eco
+            shadd16 r5, r5, r6  @ r5/2
+            sadd16 r4, r4, r5   @ sumo la muestra con el eco
+            str r4, [r0], -4    @ lo guardo en el vector original
+            subs r1, 2
             bne .ej10_loop
         pop {r4-r6}
         bx lr             

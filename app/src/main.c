@@ -240,14 +240,14 @@ static void Eco (void)
     for(uint32_t i = 0; i < longitud; i++)
         vectorIn[i] = i;
 
-    c_eco(vectorIn, longitud); 
+    // c_eco(vectorIn, longitud); 
 
-    for(uint32_t i = 0; i < longitud; i++)
-    {
-        sprintf(printOutput, "%u=%u ", i, vectorIn[i]);
-        Board_UARTPutSTR(printOutput);   
-        vectorIn[i] = i; 
-    }
+    // for(uint32_t i = 0; i < longitud; i++)
+    // {
+    //     sprintf(printOutput, "%u=%u ", i, vectorIn[i]);
+    //     Board_UARTPutSTR(printOutput);   
+    //     vectorIn[i] = i; 
+    // }
     Board_UARTPutSTR("\r\n--------------------------------------------\r\n");           
 
     asm_eco(vectorIn, longitud);
